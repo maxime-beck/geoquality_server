@@ -30,6 +30,22 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use(function(req, res, next){
+  res.status(404);
+  // respond with html page
+  if (req.accepts('html')) {
+    res.render('404', { url: req.url });
+    return;
+  }
+  // respond with json
+  if (req.accepts('json')) {
+    res.send({ error: 'Ressource not found' });
+    return;
+  }
+  // default to plain-text. send()
+  res.type('txt').send('Ressource not found');
+});
+
 // Rest API - URLs handling
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
